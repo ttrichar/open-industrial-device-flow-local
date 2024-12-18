@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@aspnet/signalr@1.1.2/dist/browser/signalr.js"></script>
+    <script>
+      const connection = new signalR.HubConnectionBuilder()
+        .withUrl('https://frg1-iot-devices-flow.azurewebsites.net/api')
+        // .withUrl('http://localhost:7071/api')
+        .build();
+
+      connection.on('telemetry', function (messageFromIoTDevice) {
+        console.log(messageFromIoTDevice);
+
+        document.getElementById('message').innerHTML =
+          JSON.stringify(messageFromIoTDevice);
+      });
+
+      connection.onclose(() => connection.start().catch(console.error));
+      console.log('connecting...');
+      connection.start().catch(console.error);
+    </script>
+  </head>
+  <body>
+    <pre id="message"></pre>
+  </body>
+</html>
